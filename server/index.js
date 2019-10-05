@@ -1,19 +1,23 @@
 var express = require("express");
 var bodyParser = require("body-parser");
-var request = require("request");
+// var request = require("request"); //read about this and use for external api request
+var mainRouts = require('./routes/movieRoutes.js')
 var app = express();
 
-// Sign up and get your moviedb API key here:
+
+// Sign up and get your moviedb API key here:  DONE
 // https://www.themoviedb.org/account/signup
 
 //Helpers
 var apiHelpers = require("./helpers/apiHelpers.js");
-
+// app.use(apiHelpers) //maybe invoke?
 //Middleware
 app.use(bodyParser.json());
+app.use(mainRouts)
 
 // Due to express, when you load the page, it doesn't make a get request to '/', it simply serves up the dist folder
 app.use(express.static(__dirname + "/../client/dist"));
+
 
 //***********************************************************************************************************************
 
@@ -37,24 +41,24 @@ Use the routes below to build your application:
 //OPTION 1: Use regular routes;
 //If you are using OPTION 1, you do not need routes>movieRoutes.js file
 
-app.get("/genres", function(req, res) {
-  // make an axios request to get the official list of genres from themoviedb
-  // use this endpoint. you will need your API key from signup: https://api.themoviedb.org/3/genre/movie/list
-});
+// app.get("/genres", function(req, res) {
+//   // make an axios request to get the official list of genres from themoviedb
+//   // use this endpoint. you will need your API key from signup: https://api.themoviedb.org/3/genre/movie/list
+// });
 
-app.get("/search", function(req, res) {
-  // use this endpoint to search for movies by genres (using API key): https://api.themoviedb.org/3/discover/movie
-  // and sort them by votes (worst first) using the search parameters in themoviedb API
-  // do NOT save the results into the database; render results directly on the page
-});
+// app.get("/search", function(req, res) {
+//   // use this endpoint to search for movies by genres (using API key): https://api.themoviedb.org/3/discover/movie
+//   // and sort them by votes (worst first) using the search parameters in themoviedb API
+//   // do NOT save the results into the database; render results directly on the page
+// });
 
-app.post("/save", function(req, res) {
-  //save movie as favorite into the database
-});
+// app.post("/save", function(req, res) {
+//   //save movie as favorite into the database
+// });
 
-app.post("/delete", function(req, res) {
-  //remove movie from favorites into the database
-});
+// app.post("/delete", function(req, res) {
+//   //remove movie from favorites into the database
+// });
 
 //***********************************************************************************************************************
 //OPTION 2: Use Express Router
@@ -65,8 +69,9 @@ app.post("/delete", function(req, res) {
 const movieRoutes = require("./routes/movieRoutes.js");
 
 //Use routes
-app.use("/movies", movieRoutes);
+app.use("/movies", movieRoutes); //when making requests fro mfront end make requests gtom /movies/search... etc
 
-app.listen(3000, function() {
+app.listen(3000, function () {
   console.log("listening on port 3000!");
+  console.log('you can do this! just chunk it!')
 });
