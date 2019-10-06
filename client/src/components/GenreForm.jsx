@@ -13,8 +13,12 @@ class GenreForm extends Component {
   }
 
   handleChange(event) {
-    console.log("handling change in GenreForm component");
-    this.setState({ currentGenreId: event.target.value });
+    console.log("handling change in GenreForm component", {
+      eventTarget: event.target.options
+    });
+    this.setState({
+      currentGenreId: event.target.options[event.target.selectedIndex].value
+    });
   }
 
   handleSubmit(event) {
@@ -22,6 +26,7 @@ class GenreForm extends Component {
     event.preventDefault();
     //searchByGenre where current state is the genreId
     this.props.getMovies(this.state.currentGenreId);
+    console.log({ state: this.state });
   }
 
   render() {
@@ -32,7 +37,9 @@ class GenreForm extends Component {
             return <option value={genre.id}>{genre.name}</option>;
           })}
         </select>
-        <input type="submit" value="Submit" />
+        <button type="submit" value="Submit">
+          SEARCH
+        </button>
       </form>
     );
   }

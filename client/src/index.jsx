@@ -25,10 +25,12 @@ class App extends React.Component {
   getMovies(genreId) {
     //comes from options value
     // make an axios request to your server on the GET SEARCH endpoint
-    Axios.get("/movies/search", genreId) //this is not correct yet
+    //how do I set up the id query? this should be happening in my server
+    return Axios.get(`/movies/search?id=${genreId}`, genreId) //this is not correct yet
       .then(({ data }) => {
-        console.log("successful search from client", { data });
-        this.setState({ movies: data });
+        console.log("successful search from client", { movies: data });
+        this.setState({ movies: data.results });
+        console.log({ state_after_query: this.state });
       })
       .catch(err => {
         console.log("unsucessfuly search from client", err);
@@ -37,7 +39,7 @@ class App extends React.Component {
 
   saveMovie(favoriteMovie) {
     // same as above but do something diff
-    Axios.post("/movies/save", favoriteMovie)
+    return Axios.post("/movies/save", favoriteMovie)
       .then(() => {
         console.log("successful post to favorites from client");
       })
@@ -48,7 +50,7 @@ class App extends React.Component {
 
   deleteMovie(unfavorableMovie) {
     // same as above but do something diff
-    Axios.delete("/movies/delete", { data: unfavorableMovie })
+    return Axios.delete("/movies/delete", { data: unfavorableMovie })
       .then(() => {
         console.log("successful deletion from client");
       })

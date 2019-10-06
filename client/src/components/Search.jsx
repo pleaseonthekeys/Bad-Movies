@@ -49,8 +49,6 @@ class Search extends React.Component {
         />
         <br />
         <br />
-
-        <button>Search</button>
       </div>
     );
   }
