@@ -12,13 +12,14 @@ class App extends React.Component {
     this.state = {
       movies: [{ deway: "movies" }],
       favorites: [{ deway: "favorites" }],
+      favoritesTitles: [],
       showFaves: false
     };
 
     // you might have to do something important here!
     this.getMovies = this.getMovies.bind(this);
-    // this.saveMovies = this.saveMovies.bind(this);
-    // this.deleteMovies = this.deleteMovies.bind(this);
+    this.saveMovie = this.saveMovie.bind(this);
+    this.deleteMovie = this.deleteMovie.bind(this);
     this.swapFavorites = this.swapFavorites.bind(this);
   }
 
@@ -39,7 +40,12 @@ class App extends React.Component {
 
   saveMovie(favoriteMovie) {
     // same as above but do something diff
-    return Axios.post("/movies/save", favoriteMovie)
+    this.setState({
+      favorites: [...this.state.favorites, favoriteMovie],
+      favoritesTitles: [...this.state.favoritesTitles, favoriteMovie.title]
+    });
+    let params = { movie_name: favoriteMovie.title };
+    return Axios.post("/movies/save", params)
       .then(() => {
         console.log("successful post to favorites from client");
       })
@@ -50,13 +56,21 @@ class App extends React.Component {
 
   deleteMovie(unfavorableMovie) {
     // same as above but do something diff
-    return Axios.delete("/movies/delete", { data: unfavorableMovie })
-      .then(() => {
-        console.log("successful deletion from client");
-      })
-      .catch(err => {
-        console.log("unsuccessful deletion from client");
-      });
+    let favesArr = this.state.favoritesTitles;
+    console.log(favesArr);
+    if (favesArr.includes(unfavorableMovie.title)) {
+      favesArr.splice(favesArr.indexOf(unfavorableMovie.title, 1));
+      let params = {
+        movie_name: unfavorableMovie.title
+      };
+      return Axios.delete("/movies/delete", { data: params.movie_name })
+        .then(() => {
+          console.log("successful deletion from client");
+        })
+        .catch(err => {
+          console.log("unsuccessful deletion from client");
+        });
+    }
   }
 
   swapFavorites() {
@@ -84,6 +98,9 @@ class App extends React.Component {
               this.state.showFaves ? this.state.favorites : this.state.movies
             }
             showFaves={this.state.showFaves}
+            saveMovie={this.saveMovie}
+            favorites={this.state.favorites}
+            deleteMovie={this.deleteMovie}
           />
         </div>
       </div>
